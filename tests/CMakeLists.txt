@@ -1,2 +1,2 @@
-add_subdirectory(async_tst)
+add_subdirectory(bulk_tst)
 add_subdirectory(server_tst)

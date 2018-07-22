@@ -17,6 +17,6 @@ public:
   Block parsing(const std::string& line);
 };
 
-int start_parsing(int argc, char *argv[]);
+int start_parsing(int argc, char *argv[], uint n);
 
 #endif

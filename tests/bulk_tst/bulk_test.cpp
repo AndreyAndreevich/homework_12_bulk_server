@@ -1,3 +1,5 @@
+#define BOOST_TEST_LOG_LEVEL test_suite
+#define BOOST_TEST_MODULE test_main
 #include <boost/test/unit_test.hpp>
 #include <boost/mpl/assert.hpp>
 

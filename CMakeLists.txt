@@ -6,6 +6,9 @@ else()
         project(bulk_server VERSION 0.0.1)  
 endif()
 
+find_package(Boost COMPONENTS system unit_test_framework REQUIRED)
+find_package(Threads REQUIRED QUIET)
+
 set(CMAKE_CXX_STANDARD 14)
 
 add_subdirectory(src)

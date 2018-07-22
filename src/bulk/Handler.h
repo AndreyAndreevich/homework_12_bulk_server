@@ -16,7 +16,7 @@ class Handler {
   std::shared_ptr<Commands> commands;
   BlockParser parser;
   int N = 0;
-  int max_size_commad = 50;
+  uint max_size_commad = 50;
 
   void print();
   void update();
