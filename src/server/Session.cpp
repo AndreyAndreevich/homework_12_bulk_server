@@ -26,35 +26,34 @@ void Session::do_read() {
   boost::asio::async_read_until(socket_, response_,  sign_,
     [this, self](boost::system::error_code ec, std::size_t /*length*/)
     {
-      std::istream is(&response_);
-      std::ostream out(&buffer_);
-      std::string line;
       if (!ec)
       {
+        std::istream is(&response_);
+        std::ostream out(&buffer_);
+        std::string line;
         while (std::getline(is, line)) {
           auto block = parser_.parsing(line);
           if (block == BlockParser::StartBlock) {
-            sign_ = "\n}\n";
+            sign_ = "}\n";
           } else if (block == BlockParser::CancelBlock) {
             sign_ = "\n";
-            std::cout << "size = " << buffer_.size() << '\n';
+            handler_->stop();
+            handler_->accumulate();
             std::istream is(&buffer_);
-            std::string line;   
+            std::string line;  
             while (std::getline(is, line)) {
-              std::cout << "buffer " << line << '\n';
               handler_->addCommand(line);
             }
+            handler_->stop();
           } else if (block == BlockParser::Command) {
-            if (parser_.blocks_count == 0) {
-              handler_->addCommand(line);
-            } else {
+            if (parser_.is_block) {
               out << line << '\n';
+            } else {
+              handler_->addCommand(line);
             }
           }
         }
         do_read();
-      } else {
-
       }
     });
 }

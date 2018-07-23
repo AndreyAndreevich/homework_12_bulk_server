@@ -21,8 +21,10 @@ BlockParser::Block BlockParser::parsing(const std::string& line) {
     blocks_count++;
     if (blocks_count > 1) 
       return Block::Empty;
-    else 
+    else {
+      is_block = true;
       return Block::StartBlock;
+    }
   }
 
   if(line == "}") {
@@ -32,8 +34,10 @@ BlockParser::Block BlockParser::parsing(const std::string& line) {
     blocks_count--;
     if (blocks_count != 0) 
       return Block::Empty;
-    else 
+    else {
+      is_block = false;
       return Block::CancelBlock;
+    }
   }
   return Block::Command;
 }

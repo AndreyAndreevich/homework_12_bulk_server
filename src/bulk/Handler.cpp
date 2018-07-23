@@ -11,6 +11,10 @@ Handler::Handler(const int& n) {
   commands = std::make_shared<Commands>();
 }
 
+void Handler::accumulate() {
+  is_accumulate = true;
+}
+
 void Handler::print() {
   for(auto& writer : writers) {
     if (!writer.expired()) {
@@ -39,13 +43,14 @@ void Handler::addCommand(const std::string& command) {
   commands->push_back(command);
   update();
 
-  if (commands->size() == N) {
+  if (!is_accumulate && commands->size() == N) {
     print();
     commands->clear();
   }
 }
 
 void Handler::stop() {
+  is_accumulate = false;
   if (commands->size())
     print();
   commands->clear();
