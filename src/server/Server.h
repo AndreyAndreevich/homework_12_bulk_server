@@ -17,7 +17,6 @@ private:
   std::shared_ptr<Handler> handler_;
   tcp::acceptor acceptor_;
   tcp::socket socket_;
-  std::shared_ptr<uint> session_count_ = std::make_shared<uint>(0);
 };
 
 #endif

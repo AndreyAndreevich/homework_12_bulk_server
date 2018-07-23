@@ -14,7 +14,6 @@ class Handler {
 
   std::vector<std::weak_ptr<Observer>> writers;
   std::shared_ptr<Commands> commands;
-  BlockParser parser;
   int N = 0;
   uint max_size_commad = 50;
 

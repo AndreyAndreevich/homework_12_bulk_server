@@ -3,10 +3,9 @@
 
 #include <string>
 
-class BlockParser {
+struct BlockParser {
   int blocks_count = 0;
-public:
-
+  
   enum Block {
     StartBlock,
     CancelBlock,

@@ -33,48 +33,6 @@ BOOST_AUTO_TEST_SUITE(test_handler)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    BOOST_AUTO_TEST_CASE(print_blocks)
-    {
-        std::stringbuf out_buffer;
-        std::ostream out_stream(&out_buffer);
-
-        auto handler = std::make_shared<Handler>(5);
-        auto consoleWriter = std::make_shared<ConsoleWriter>(out_stream);
-        auto fileWriter = std::make_shared<FileWriter>();
-        consoleWriter->subscribe(handler);
-        fileWriter->subscribe(handler);
-
-        handler->addCommand("cmd1");
-        handler->addCommand("cmd2");
-        handler->addCommand("{");
-
-        std::ifstream file{fileWriter->getName()};
-        std::stringstream string_stream;
-        string_stream << file.rdbuf();
-        file.close();
-        std::remove(fileWriter->getName().c_str());
-
-        BOOST_CHECK_EQUAL(out_buffer.str(),"bulk: cmd1, cmd2\n");
-        BOOST_CHECK_EQUAL(string_stream.str(),"bulk: cmd1, cmd2");
-
-        out_buffer.str("");
-        string_stream.str("");
-
-        handler->addCommand("cmd3");
-        handler->addCommand("cmd4");
-        handler->addCommand("}");
-
-        file.open(fileWriter->getName());
-        string_stream << file.rdbuf();
-        file.close();
-        std::remove(fileWriter->getName().c_str());
-
-        BOOST_CHECK_EQUAL(out_buffer.str(),"bulk: cmd3, cmd4\n");
-        BOOST_CHECK_EQUAL(string_stream.str(),"bulk: cmd3, cmd4");
-    }
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-
     BOOST_AUTO_TEST_CASE(delete_writer)
     {
         std::stringbuf out_buffer;
@@ -158,48 +116,6 @@ BOOST_AUTO_TEST_SUITE(test_handler)
 
         BOOST_CHECK_EQUAL(out_buffer.str(),"bulk: , \n");
         BOOST_CHECK_EQUAL(out_buffer.str(),"bulk: , \n"); 
-    }
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-    BOOST_AUTO_TEST_CASE(start_empty_block)
-    {
-        std::stringbuf out_buffer;
-        std::ostream out_stream(&out_buffer);
-
-        auto handler = std::make_shared<Handler>(2);
-        auto consoleWriter = std::make_shared<ConsoleWriter>(out_stream);
-        auto fileWriter = std::make_shared<FileWriter>();
-        consoleWriter->subscribe(handler);
-        fileWriter->subscribe(handler);
-        
-        handler->addCommand("{");
-        handler->stop();
-
-        std::fstream file;
-        file.open(fileWriter->getName());
-        std::stringstream string_stream;
-        string_stream << file.rdbuf();
-        file.close();
-
-        BOOST_CHECK(out_buffer.str().empty());
-        BOOST_CHECK(out_buffer.str().empty()); 
-    }
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-    BOOST_AUTO_TEST_CASE(empty_block)
-    {
-        std::stringbuf out_buffer;
-        std::ostream out_stream(&out_buffer);
-
-        auto handler = std::make_shared<Handler>(2);
-        auto consoleWriter = std::make_shared<ConsoleWriter>(out_stream);
-        consoleWriter->subscribe(handler);
-        
-        handler->addCommand("cmd1");
-        handler->addCommand("{");
-        BOOST_CHECK_THROW(handler->addCommand("}"),std::exception);
     }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -35,35 +35,9 @@ void Handler::addCommand(const std::string& command) {
   if (command.size() > max_size_commad) {
     throw std::runtime_error("very large string");
   }
-  
-  if (N == 0) {
-    throw std::runtime_error("parameter is zero"); 
-  } 
 
-  switch(parser.parsing(command))
-  {
-    case BlockParser::Empty: 
-      break;
-
-    case BlockParser::StartBlock: 
-      N = -1; 
-      if (commands->size() > 0)
-        print();
-      commands->clear();
-      break;
-
-    case BlockParser::CancelBlock:
-      N = commands->size();
-      if (N == 0) throw std::runtime_error("emty block");
-      break;
-
-    case BlockParser::Command:
-      commands->push_back(command);
-      update();
-      break;
-
-    default: break;
-  }
+  commands->push_back(command);
+  update();
 
   if (commands->size() == N) {
     print();
@@ -72,7 +46,7 @@ void Handler::addCommand(const std::string& command) {
 }
 
 void Handler::stop() {
-  if (N != -1 && commands->size())
+  if (commands->size())
     print();
   commands->clear();
 }
