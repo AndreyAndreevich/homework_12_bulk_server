@@ -3,6 +3,10 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/mpl/assert.hpp>
 
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+
 #include "Server.h"
 #include "Writers.h"
 
