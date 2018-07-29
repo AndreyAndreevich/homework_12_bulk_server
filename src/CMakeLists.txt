@@ -15,7 +15,7 @@ file(GLOB SOURCE
         ${CMAKE_CURRENT_SOURCE_DIR}/server/*.cpp
         )
         
-add_executable(${SERVER} ${SOURCE})
+add_executable(${SERVER} main.cpp ${SOURCE})
 set_target_properties(${SERVER} PROPERTIES
         CXX_STANDARD_REQUIRED ON
         COMPILE_DEFINITIONS BOOST_ASIO_ENABLE_HANDLER_TRACKING

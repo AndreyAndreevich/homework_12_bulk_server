@@ -25,7 +25,7 @@ public:
   void accumulate();
   void subscribe(const std::weak_ptr<Observer>& obs);
   void addCommand(const std::string& command);
-  void stop();
+  virtual void stop();
 };
 
 #endif

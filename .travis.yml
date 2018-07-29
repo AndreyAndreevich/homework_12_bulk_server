@@ -1,0 +1,26 @@
+language: cpp
+matrix:
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env:
+        - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+before_install:
+  - eval "${MATRIX_EVAL}"
+before_script:
+  - sudo apt-get install libboost-test-dev -y
+script:
+  - cmake .
+  - cmake --build .
+  - cmake --build . --target test
+  - cmake --build . --target package
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script:
+      - curl -T bulk_server-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb -uandreyandreevich:$BINTRAY_API_KEY "https://api.bintray.com/content/12345678/cpp_projects/bulk_server/$TRAVIS_BUILD_NUMBER/bulk_server-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb;deb_distribution=trusty;deb_component=main;deb_architecture=amd64;publish=1"
