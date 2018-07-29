@@ -17,7 +17,8 @@ before_script:
 script:
   - cmake .
   - cmake --build .
-  - cmake --build . --target test
+  - tests/bulk_tst/bulk_test
+  - tests/server_tst/server_test
   - cmake --build . --target package
 deploy:
   - provider: script
